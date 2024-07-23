@@ -9,13 +9,13 @@ sample_data <- generate_sample_dataset(n = 10, file_name = "test_sample.sav", di
 test_that("generate_label_table creates correct structure", {
   label_table <- generate_label_table(sample_data, to_csv = FALSE)
   expect_s3_class(label_table, "data.frame")
-  expect_equal(ncol(label_table), 6)
+  expect_equal(ncol(label_table), 8)
   expect_equal(nrow(label_table), ncol(sample_data))
 })
 
 test_that("generate_label_table creates correct columns", {
   label_table <- generate_label_table(sample_data, to_csv = FALSE)
-  expected_cols <- c("item_name", "item_label", "min_label", "min_value", "n_values", "value_labels")
+  expected_cols <- c("item_name", "item_label", "min_label", "max_label", "min_value", "max_value", "n_values", "value_labels")
   expect_equal(colnames(label_table), expected_cols)
 })
 

@@ -30,7 +30,9 @@ generate_label_table <- function(dat,
     item_name = names(var_labels),
     item_label = unlist(var_labels, use.names = FALSE),
     min_label = NA,
+    max_label = NA,
     min_value = NA,
+    max_value = NA,
     n_values = NA,
     value_labels = NA
   )
@@ -44,8 +46,11 @@ generate_label_table <- function(dat,
       if ("haven_labelled" %in% class(dat[[item_name]])) {
         lvl <- labelled::val_labels(dat[[item_name]])
         if (length(lvl) > 0) {
+          n = length(lvl)
           label_table$min_label[i] <- names(lvl)[1]
+          label_table$max_label[i] <- names(lvl)[n]
           label_table$min_value[i] <- lvl[1]
+          label_table$max_value[i] <- lvl[n]
           label_table$n_values[i] <- length(lvl)
           label_table$value_labels[i] <- rjson::toJSON(as.list(lvl))
         }
