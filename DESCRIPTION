@@ -14,7 +14,8 @@ LazyData: true
 Imports: 
     haven,
     labelled,
-    rjson
+    rjson,
+    countrycode
 RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)
