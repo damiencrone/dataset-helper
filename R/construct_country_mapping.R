@@ -43,7 +43,10 @@ construct_country_mapping <- function (x, alpha_code = "iso3c", warn = TRUE) {
   x[x < 0] <- NA
   ux <- unique(x[!is.na(x)])
   if (is.numeric(x) & "haven_labelled" %in% class(x)) {
-    uv <- names(labelled::val_labels(x))
+    all_labels <- labelled::val_labels(x)
+    valid_labels <- all_labels[all_labels %in% ux]
+    uv <- names(valid_labels)
+    x <- set_value_labels(x, valid_labels)
   } else {
     uv <- ux
   }
