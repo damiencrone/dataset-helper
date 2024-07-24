@@ -39,29 +39,30 @@
 #' @importFrom labelled val_labels set_value_labels
 #'
 #' @export
-construct_country_mapping <- function (x, alpha_code = "iso3c", warn = TRUE) {
+construct_country_mapping <- function(x, alpha_code = "iso3c", warn = TRUE) {
   is_haven_labelled <- is.numeric(x) & "haven_labelled" %in% class(x)
+
   x[x < 0] <- NA
+  x <- sort(x)
   ux <- unique(x[!is.na(x)])
+
   if (is_haven_labelled) {
-    all_labels <- labelled::val_labels(x)
-    valid_labels <- all_labels[all_labels %in% ux]
+    valid_labels <- labelled::val_labels(x)[labelled::val_labels(x) %in% ux]
     uv <- names(valid_labels)
-    x <- labelled::set_value_labels(x, valid_labels)
   } else {
     uv <- ux
   }
+
   scheme <- infer_countrycode_scheme(uv)
-  freq_table <- table(x)
-  if (is_haven_labelled) {
-    names(freq_table) <- names(valid_labels)
-  }
+  freq_table <- table(x[!is.na(x)])
+
   country_mapping <- data.frame(
     Country = countrycode::countrycode(sourcevar = uv, origin = scheme, destination = "country.name", warn = warn),
-    Code = 0:(length(uv)-1),
+    Code = seq_along(uv) - 1,
     Alpha_Code = countrycode::countrycode(sourcevar = uv, origin = scheme, destination = alpha_code, warn = warn),
     Source_Var = ux,
-    Freq = as.vector(freq_table[ux])
+    Freq = as.vector(freq_table)
   )
+
   return(country_mapping)
 }

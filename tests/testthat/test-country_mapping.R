@@ -59,7 +59,7 @@ test_that("construct_country_mapping handles haven_labelled data with negative v
 
   # Create a sample haven_labelled vector with negative values
   x <- labelled(
-    c(32, 76, -1, 156, -2, 392, -3, 484, -4, 643, -5),
+    c(32, 76, -1, 156, -2, 392, -3, 484, -4, 643, 643, -5),
     labels = c(
       "Don't know" = -1,
       "No answer" = -2,
@@ -83,7 +83,7 @@ test_that("construct_country_mapping handles haven_labelled data with negative v
   # Check that negative values are not in the result
   expect_false(any(result$Source_Var < 0, na.rm = TRUE))
 
-  # Check that we have the correct number of countries (6) plus NA
+  # Check that we have the correct number of countries (6)
   expect_equal(nrow(result), 6)
 
   # Check that specific countries are present
@@ -94,4 +94,8 @@ test_that("construct_country_mapping handles haven_labelled data with negative v
 
   # Check that Codes are assigned correctly (0 to 5 for countries)
   expect_equal(sort(result$Code[!is.na(result$Code)]), 0:5)
+
+  # Check that frequencies are correct
+  expect_equal(result$Freq[result$Source_Var == 32], 1)
+  expect_equal(result$Freq[result$Source_Var == 643], 2)
 })
