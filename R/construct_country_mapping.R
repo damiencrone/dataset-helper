@@ -36,7 +36,7 @@
 #' construct_country_mapping(y)
 #'
 #' @importFrom countrycode countrycode
-#' @importFrom labelled val_labels
+#' @importFrom labelled val_labels set_value_labels
 #'
 #' @export
 construct_country_mapping <- function (x, alpha_code = "iso3c", warn = TRUE) {
@@ -46,7 +46,7 @@ construct_country_mapping <- function (x, alpha_code = "iso3c", warn = TRUE) {
     all_labels <- labelled::val_labels(x)
     valid_labels <- all_labels[all_labels %in% ux]
     uv <- names(valid_labels)
-    x <- set_value_labels(x, valid_labels)
+    x <- labelled::set_value_labels(x, valid_labels)
   } else {
     uv <- ux
   }
