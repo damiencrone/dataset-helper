@@ -99,3 +99,35 @@ test_that("construct_country_mapping handles haven_labelled data with negative v
   expect_equal(result$Freq[result$Source_Var == 32], 1)
   expect_equal(result$Freq[result$Source_Var == 643], 2)
 })
+
+test_that("construct_country_mapping handles character haven_labelled input", {
+  library(haven)
+  library(labelled)
+
+  x <- labelled(
+    c("AT", "AT", "BE", "BG", "CH", "AT", "AL"),
+    labels = c(
+      Albania = "AL",
+      Austria = "AT",
+      Belgium = "BE",
+      Bulgaria = "BG",
+      Switzerland = "CH"
+    )
+  )
+
+  result <- construct_country_mapping(x)
+
+  expect_s3_class(result, "data.frame")
+  expect_equal(ncol(result), 5)
+  expect_equal(nrow(result), 5)  # 4 unique countries in the data
+  expect_equal(colnames(result), c("Country", "Code", "Alpha_Code", "Source_Var", "Freq"))
+
+  expect_true(all(c("Austria", "Belgium", "Bulgaria", "Switzerland") %in% result$Country))
+  expect_equal(result$Code, 0:4)
+  expect_true(all(c("AUT", "BEL", "BGR", "CHE") %in% result$Alpha_Code))
+  expect_true(all(c("AT", "BE", "BG", "CH") %in% result$Source_Var))
+
+  expect_equal(result$Freq[result$Source_Var == "AT"], 3)
+  expect_equal(result$Freq[result$Source_Var == "BE"], 1)
+  expect_equal(sum(result$Freq), 7)
+})

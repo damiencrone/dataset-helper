@@ -40,18 +40,27 @@
 #'
 #' @export
 construct_country_mapping <- function(x, alpha_code = "iso3c", warn = TRUE) {
-  is_haven_labelled <- is.numeric(x) & "haven_labelled" %in% class(x)
+  is_haven_labelled <- "haven_labelled" %in% class(x)
+  is_character <- is.character(x)
 
-  x[x < 0] <- NA
+  if (!is_character) {
+    x[x < 0] <- NA
+  }
   x <- sort(x)
   ux <- unique(x[!is.na(x)])
 
   if (is_haven_labelled) {
-    valid_labels <- labelled::val_labels(x)[labelled::val_labels(x) %in% ux]
-    uv <- names(valid_labels)
+    valid_labels <- labelled::val_labels(x)
+    if (is_character) {
+      uv <- names(valid_labels)
+    } else {
+      valid_labels <- valid_labels[valid_labels %in% ux]
+      uv <- names(valid_labels)
+    }
   } else {
     uv <- ux
   }
+  print(uv)
 
   scheme <- infer_countrycode_scheme(uv)
   freq_table <- table(x[!is.na(x)])
