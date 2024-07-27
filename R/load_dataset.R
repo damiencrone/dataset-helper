@@ -20,7 +20,7 @@ load_dataset <- function(dataset_name,
   if (to_csv) {
     csv_exists <- file.exists(paste0(dataset_name, ".csv"))
     if (!csv_exists) {
-      write.csv(dat, file = paste0(dataset_name, ".csv"), row.names = FALSE)
+      write.csv(dat, file = "processed.csv", row.names = FALSE)
     }
   }
   return(dat)
