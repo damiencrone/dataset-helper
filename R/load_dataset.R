@@ -18,9 +18,10 @@ load_dataset <- function(dataset_name,
   }
   dat <- haven::read_sav(paste0(dataset_name, ".sav"))
   if (to_csv) {
-    csv_exists <- file.exists(paste0(dataset_name, ".csv"))
+    out_fn = paste0(dataset_dir, "/processed.csv")
+    csv_exists <- file.exists(out_fn)
     if (!csv_exists) {
-      write.csv(dat, file = "processed.csv", row.names = FALSE)
+      write.csv(dat, file = out_fn, row.names = FALSE)
     }
   }
   return(dat)

@@ -21,7 +21,7 @@ test_that("load_dataset creates CSV file when requested", {
     file.remove(csv_path)
   }
   load_dataset("test_sample", to_csv = TRUE, dataset_dir = data_dir)
-  expect_true(file.exists(csv_path))
+  expect_true(file.exists(file.path(data_dir, "processed.csv")))
   file.remove(csv_path)
 })
 
